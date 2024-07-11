@@ -13,20 +13,31 @@ service ChatV1 {
   rpc Send(SendRequest) returns (google.protobuf.Empty);
 }
 
+message UserInfo {
+  string name = 1; // for view in chat-room
+  string email = 2; // unic
+}
+
+// rpc Create(CreateRequest) returns (CreateResponse);
+
 message CreateRequest {
-  repeated string usernames = 1;
+  repeated UserInfo users = 1;
 }
 
 message CreateResponse {
-  int64 id = 1;
+  int64 id = 1; // number in pool chat-rooms
 }
+
+// rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
 
 message DeleteRequest {
   int64 id = 1;
 }
 
+// rpc Send(SendRequest) returns (google.protobuf.Empty);
+
 message SendRequest {
-  string from = 1;
+  string from = 1; // email
   string text = 2;
   google.protobuf.Timestamp timestamp = 3;
 }
