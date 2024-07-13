@@ -14,7 +14,7 @@ import (
 
 const (
 	address = "localhost:50052"
-	userId  = 100001
+	userID  = 100001
 )
 
 func main() {
@@ -23,19 +23,25 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to connect to server: %v", err)
 	}
-	defer conn.Close()
+
+	defer func() {
+		err = conn.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
 
 	client := desc.NewChatV1Client(conn)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	CreateRequest(ctx, client)
-	SendRequest(ctx, client)
-	DeleteRequest(ctx, client)
+	createRequest(ctx, client)
+	sendRequest(ctx, client)
+	deleteRequest(ctx, client)
 }
 
-func CreateRequest(ctx context.Context, client desc.ChatV1Client) {
+func createRequest(ctx context.Context, client desc.ChatV1Client) {
 
 	users := []*desc.UserInfo{
 		{Name: gofakeit.Name(), Email: gofakeit.Email()},
@@ -55,19 +61,19 @@ func CreateRequest(ctx context.Context, client desc.ChatV1Client) {
 		color.GreenString("%+d", createRequest.GetId()))
 }
 
-func DeleteRequest(ctx context.Context, client desc.ChatV1Client) {
+func deleteRequest(ctx context.Context, client desc.ChatV1Client) {
 
 	_, err := client.Delete(ctx, &desc.DeleteRequest{
-		Id: userId,
+		Id: userID,
 	})
 
 	if err != nil {
 		log.Fatalf("failed to delete chat by id: %v", err)
 	}
-	log.Printf(color.RedString("Delete chat :\n"))
+	log.Print(color.RedString("Delete chat :\n"))
 }
 
-func SendRequest(ctx context.Context, client desc.ChatV1Client) {
+func sendRequest(ctx context.Context, client desc.ChatV1Client) {
 
 	_, err := client.Send(ctx, &desc.SendRequest{
 		From: "name:name@mail",
@@ -77,5 +83,5 @@ func SendRequest(ctx context.Context, client desc.ChatV1Client) {
 	if err != nil {
 		log.Fatalf("failed send to chat : %v", err)
 	}
-	log.Printf(color.RedString("Send to chat :\n"))
+	log.Print(color.RedString("Send to chat :\n"))
 }
