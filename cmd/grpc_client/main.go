@@ -2,12 +2,13 @@ package main
 
 import (
 	"context"
+	"log"
+	"time"
+
 	"github.com/brianvoe/gofakeit"
 	"github.com/fatih/color"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"log"
-	"time"
 
 	desc "github.com/travacry/chat-server/pkg/chat_v1"
 )

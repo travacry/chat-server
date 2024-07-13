@@ -3,13 +3,14 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"net"
+
 	"github.com/brianvoe/gofakeit"
 	"github.com/fatih/color"
 	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"log"
-	"net"
 
 	desc "github.com/travacry/chat-server/pkg/chat_v1"
 )
