@@ -23,7 +23,7 @@ type server struct {
 
 func (s *server) Create(_ context.Context, req *desc.CreateRequest) (*desc.CreateResponse, error) {
 
-	log.Printf(color.RedString("Create Chat:\n"),
+	fmt.Printf(color.RedString("Create Chat:\n"),
 		color.GreenString("info : %+v", req.GetUsers()))
 
 	return &desc.CreateResponse{
@@ -33,7 +33,7 @@ func (s *server) Create(_ context.Context, req *desc.CreateRequest) (*desc.Creat
 
 func (s *server) Send(_ context.Context, req *desc.SendRequest) (*empty.Empty, error) {
 
-	log.Printf(color.RedString("Send Text:\n"),
+	fmt.Printf(color.RedString("Send Text:\n"),
 		color.GreenString("from : %s, msg : %s", req.From, req.Text))
 
 	return &empty.Empty{}, nil
@@ -41,7 +41,7 @@ func (s *server) Send(_ context.Context, req *desc.SendRequest) (*empty.Empty, e
 
 func (s *server) Delete(_ context.Context, req *desc.DeleteRequest) (*empty.Empty, error) {
 
-	log.Printf(color.RedString("Delete Chat:\n"),
+	fmt.Printf(color.RedString("Delete Chat:\n"),
 		color.GreenString("info : %+v", req.GetId()))
 
 	return &empty.Empty{}, nil
@@ -49,8 +49,9 @@ func (s *server) Delete(_ context.Context, req *desc.DeleteRequest) (*empty.Empt
 
 func main() {
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcPort))
+
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Panicf("failed to listen: %v", err)
 	}
 
 	s := grpc.NewServer()
@@ -60,6 +61,6 @@ func main() {
 	log.Printf("server chat listening at %v", lis.Addr())
 
 	if err = s.Serve(lis); err != nil {
-		log.Fatalf("failed to chat serve: %v", err)
+		log.Printf("failed to chat serve: %v", err)
 	}
 }
