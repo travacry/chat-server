@@ -8,9 +8,17 @@ import "google/protobuf/timestamp.proto";
 option go_package = "github.com/travacry/chat-server/pkg/chat_v1;chat_v1";
 
 service ChatV1 {
+  rpc RegistrationUser(RegistrationUserRequest) returns (RegistrationUserResponse);
   rpc Create(CreateRequest) returns (CreateResponse);
   rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
+  rpc AddUser(AddUserRequest) returns (google.protobuf.Empty);
+  rpc Ban(BanRequest) returns (google.protobuf.Empty);
+  rpc Confirm(ConfirmRequest) returns (google.protobuf.Empty);
+  rpc Connect(ConnectRequest) returns (google.protobuf.Empty);
   rpc Send(SendRequest) returns (google.protobuf.Empty);
+  rpc List(ListRequest) returns (ListResponse);
+  rpc GetInfo(GetInfoRequest) returns (GetInfoResponse);
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
 }
 
 message UserInfo {
@@ -18,26 +26,77 @@ message UserInfo {
   string email = 2; // unic
 }
 
-// rpc Create(CreateRequest) returns (CreateResponse);
+message ChatInfo {
+  int64 id = 1; // id for connected
+  string name = 2; // chat unic name for view
+  google.protobuf.Timestamp create_at = 3;
+}
+
+message RegistrationUserRequest {
+  UserInfo user = 1;
+}
+
+message RegistrationUserResponse {
+  int64 id = 1;
+}
 
 message CreateRequest {
-  repeated UserInfo users = 1;
+  ChatInfo chat = 1;
+  repeated UserInfo users = 2;
 }
 
 message CreateResponse {
   int64 id = 1; // number in pool chat-rooms
 }
 
-// rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
-
 message DeleteRequest {
   int64 id = 1;
 }
 
-// rpc Send(SendRequest) returns (google.protobuf.Empty);
+message AddUserRequest {
+  UserInfo user = 1;
+}
+
+message BanRequest {
+  UserInfo user = 1;
+}
+
+message ConfirmRequest {
+  int64 id = 1;
+}
+
+message ConnectRequest {
+  int64 id = 1;
+}
 
 message SendRequest {
-  string from = 1; // email
-  string text = 2;
-  google.protobuf.Timestamp timestamp = 3;
+  string from = 2; // email
+  string text = 3;
+  google.protobuf.Timestamp timestamp = 4;
 }
+
+message ListRequest {
+  int64 id = 1;
+}
+
+message ListResponse {
+  repeated ChatInfo chats = 1;
+}
+
+message GetInfoRequest {
+  int64 id = 1;
+}
+
+message GetInfoResponse {
+  ChatInfo chat = 1;
+}
+
+message ListUsersRequest {
+  int64 id = 1;
+}
+
+message ListUsersResponse {
+  repeated UserInfo users = 1;
+}
+
+
