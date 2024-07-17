@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 
@@ -37,12 +38,26 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	createRequest(ctx, client)
-	sendRequest(ctx, client)
-	deleteRequest(ctx, client)
+	_, err = createRequest(ctx, client)
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	err = sendRequest(ctx, client)
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	err = deleteRequest(ctx, client)
+
+	if err != nil {
+		log.Print(err)
+	}
 }
 
-func createRequest(ctx context.Context, client desc.ChatV1Client) {
+func createRequest(ctx context.Context, client desc.ChatV1Client) (*desc.CreateResponse, error) {
 
 	users := []*desc.UserInfo{
 		{Name: gofakeit.Name(), Email: gofakeit.Email()},
@@ -56,25 +71,28 @@ func createRequest(ctx context.Context, client desc.ChatV1Client) {
 	})
 
 	if err != nil {
-		log.Fatalf("failed to create chat by id: %v", err)
+		return nil, fmt.Errorf("failed to create chat by id: %v", err)
 	}
-	log.Printf(color.RedString("Created chat :\n"),
-		color.GreenString("%+d", createRequest.GetId()))
+
+	fmt.Printf(color.RedString("Created chat :\n"), color.GreenString("%+d", createRequest.GetId()))
+	return createRequest, nil
 }
 
-func deleteRequest(ctx context.Context, client desc.ChatV1Client) {
+func deleteRequest(ctx context.Context, client desc.ChatV1Client) error {
 
 	_, err := client.Delete(ctx, &desc.DeleteRequest{
 		Id: userID,
 	})
 
 	if err != nil {
-		log.Fatalf("failed to delete chat by id: %v", err)
+		return fmt.Errorf("failed to delete chat by id: %v", err)
 	}
-	log.Print(color.RedString("Delete chat :\n"))
+
+	fmt.Print(color.RedString("Delete chat :\n"))
+	return nil
 }
 
-func sendRequest(ctx context.Context, client desc.ChatV1Client) {
+func sendRequest(ctx context.Context, client desc.ChatV1Client) error {
 
 	_, err := client.Send(ctx, &desc.SendRequest{
 		From: "name:name@mail",
@@ -82,7 +100,9 @@ func sendRequest(ctx context.Context, client desc.ChatV1Client) {
 	})
 
 	if err != nil {
-		log.Fatalf("failed send to chat : %v", err)
+		return fmt.Errorf("failed send to chat : %v", err)
 	}
-	log.Print(color.RedString("Send to chat :\n"))
+
+	fmt.Print(color.RedString("Send to chat :\n"))
+	return nil
 }
