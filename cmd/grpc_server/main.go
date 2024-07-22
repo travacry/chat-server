@@ -30,7 +30,7 @@ type server struct {
 func (s *server) Connect(_ context.Context, req *desc.ConnectRequest) (*empty.Empty, error) {
 
 	fmt.Print(color.RedString("Ban User: "))
-	fmt.Printf(color.GreenString("info: %d\n", req.GetId()))
+	fmt.Print(color.GreenString("info: %d\n", req.GetId()))
 
 	return &empty.Empty{}, nil
 }
@@ -38,7 +38,7 @@ func (s *server) Connect(_ context.Context, req *desc.ConnectRequest) (*empty.Em
 func (s *server) Send(_ context.Context, req *desc.SendRequest) (*empty.Empty, error) {
 
 	fmt.Print(color.RedString("Send: "))
-	fmt.Printf(color.GreenString("from: %s, msg : %s\n", strconv.FormatInt(req.From, 10), req.Text))
+	fmt.Print(color.GreenString("from: %s, msg : %s\n", strconv.FormatInt(req.From, 10), req.Text))
 
 	return &empty.Empty{}, nil
 }
@@ -60,7 +60,7 @@ func (s *server) List(_ context.Context, _ *desc.ListRequest) (*desc.ListRespons
 func (s *server) ListUsers(_ context.Context, req *desc.ListUsersRequest) (*desc.ListUsersResponse, error) {
 
 	fmt.Print(color.RedString("UserInfo: "))
-	fmt.Printf(color.GreenString("%+d\n", req.GetId()))
+	fmt.Print(color.GreenString("%+d\n", req.GetId()))
 
 	return &desc.ListUsersResponse{Users: []*desc.UserModel{
 		{Id: gofakeit.Int64(), User: &desc.UserInfo{Name: gofakeit.Name(), Email: gofakeit.Email()}},
@@ -77,7 +77,7 @@ func (s *server) ListUsers(_ context.Context, req *desc.ListUsersRequest) (*desc
 func (s *server) Create(_ context.Context, req *desc.CreateRequest) (*desc.CreateResponse, error) {
 
 	fmt.Print(color.RedString("CreateResponse: "))
-	fmt.Printf(color.GreenString("%+v\n", req.GetUsers()))
+	fmt.Print(color.GreenString("%+v\n", req.GetUsers()))
 
 	return &desc.CreateResponse{
 		Id: gofakeit.Int64(),
@@ -87,7 +87,7 @@ func (s *server) Create(_ context.Context, req *desc.CreateRequest) (*desc.Creat
 func (s *server) Delete(_ context.Context, req *desc.DeleteRequest) (*empty.Empty, error) {
 
 	fmt.Print(color.RedString("Delete Chat: "))
-	fmt.Printf(color.GreenString("%d\n", req.GetId()))
+	fmt.Print(color.GreenString("%d\n", req.GetId()))
 
 	return &empty.Empty{}, nil
 }
@@ -95,7 +95,7 @@ func (s *server) Delete(_ context.Context, req *desc.DeleteRequest) (*empty.Empt
 func (s *server) AddUser(_ context.Context, req *desc.AddUserRequest) (*empty.Empty, error) {
 
 	fmt.Print(color.RedString("Add User: "))
-	fmt.Printf(color.GreenString("info : %+v\n", req.GetUser()))
+	fmt.Print(color.GreenString("info : %+v\n", req.GetUser()))
 
 	return &empty.Empty{}, nil
 }
@@ -103,7 +103,7 @@ func (s *server) AddUser(_ context.Context, req *desc.AddUserRequest) (*empty.Em
 func (s *server) Ban(_ context.Context, req *desc.BanRequest) (*empty.Empty, error) {
 
 	fmt.Print(color.RedString("Ban User: "))
-	fmt.Printf(color.GreenString("%+d\n", req.GetId()))
+	fmt.Print(color.GreenString("%+d\n", req.GetId()))
 
 	return &empty.Empty{}, nil
 }

@@ -94,7 +94,7 @@ func connect(ctx context.Context, client desc.ChatV1Client) error {
 	}
 
 	fmt.Print(color.RedString("Connect: "))
-	fmt.Printf(color.GreenString("%d\n", chatID))
+	fmt.Print(color.GreenString("%d\n", chatID))
 	return nil
 }
 
@@ -112,7 +112,7 @@ func send(ctx context.Context, client desc.ChatV1Client) error {
 	}
 
 	fmt.Print(color.RedString("Send to client: "))
-	fmt.Printf(color.GreenString("%d\n", uId))
+	fmt.Print(color.GreenString("%d\n", uId))
 
 	return nil
 }
@@ -126,7 +126,7 @@ func list(ctx context.Context, client desc.ChatV1Client) (*desc.ListResponse, er
 	}
 
 	fmt.Print(color.RedString("List: "))
-	fmt.Printf(color.GreenString("%v\n", listResponse.GetChats()))
+	fmt.Print(color.GreenString("%v\n", listResponse.GetChats()))
 
 	return listResponse, nil
 }
@@ -140,7 +140,7 @@ func listUsers(ctx context.Context, client desc.ChatV1Client) (*desc.ListUsersRe
 	}
 
 	fmt.Print(color.RedString("List users: "))
-	fmt.Printf(color.GreenString("%v\n", listUsersResponse.GetUsers()))
+	fmt.Print(color.GreenString("%v\n", listUsersResponse.GetUsers()))
 	return listUsersResponse, nil
 }
 
@@ -162,7 +162,7 @@ func create(ctx context.Context, client desc.ChatV1Client) (*desc.CreateResponse
 	}
 
 	fmt.Print(color.RedString("Create chat: "))
-	fmt.Printf(color.GreenString("%s\n", strconv.FormatInt(createResponse.GetId(), 10)))
+	fmt.Print(color.GreenString("%s\n", strconv.FormatInt(createResponse.GetId(), 10)))
 	return createResponse, nil
 }
 
@@ -179,7 +179,7 @@ func del(ctx context.Context, client desc.ChatV1Client) error {
 	}
 
 	fmt.Print(color.RedString("Delete chat: "))
-	fmt.Printf(color.GreenString(fmt.Sprintf("%d\n", cId)))
+	fmt.Print(color.GreenString(fmt.Sprintf("%d\n", cId)))
 	return nil
 }
 
@@ -196,7 +196,7 @@ func addUser(ctx context.Context, client desc.ChatV1Client) error {
 	}
 
 	fmt.Print(color.RedString("Add user: "))
-	fmt.Printf(color.GreenString(fmt.Sprintf("%v\n", user)))
+	fmt.Print(color.GreenString(fmt.Sprintf("%v\n", user)))
 	return nil
 }
 
@@ -212,6 +212,6 @@ func ban(ctx context.Context, client desc.ChatV1Client) error {
 	}
 
 	fmt.Print(color.RedString("Ban user: "))
-	fmt.Printf(color.GreenString(fmt.Sprintf("%v\n", user)))
+	fmt.Print(color.GreenString(fmt.Sprintf("%v\n", user)))
 	return nil
 }
