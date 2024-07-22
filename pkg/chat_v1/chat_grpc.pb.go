@@ -23,16 +23,13 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ChatV1Client interface {
-	RegistrationUser(ctx context.Context, in *RegistrationUserRequest, opts ...grpc.CallOption) (*RegistrationUserResponse, error)
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	AddUser(ctx context.Context, in *AddUserRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	Ban(ctx context.Context, in *BanRequest, opts ...grpc.CallOption) (*empty.Empty, error)
-	Confirm(ctx context.Context, in *ConfirmRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	Connect(ctx context.Context, in *ConnectRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	Send(ctx context.Context, in *SendRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
-	GetInfo(ctx context.Context, in *GetInfoRequest, opts ...grpc.CallOption) (*GetInfoResponse, error)
 	ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersResponse, error)
 }
 
@@ -42,15 +39,6 @@ type chatV1Client struct {
 
 func NewChatV1Client(cc grpc.ClientConnInterface) ChatV1Client {
 	return &chatV1Client{cc}
-}
-
-func (c *chatV1Client) RegistrationUser(ctx context.Context, in *RegistrationUserRequest, opts ...grpc.CallOption) (*RegistrationUserResponse, error) {
-	out := new(RegistrationUserResponse)
-	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/RegistrationUser", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *chatV1Client) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
@@ -89,15 +77,6 @@ func (c *chatV1Client) Ban(ctx context.Context, in *BanRequest, opts ...grpc.Cal
 	return out, nil
 }
 
-func (c *chatV1Client) Confirm(ctx context.Context, in *ConfirmRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/Confirm", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *chatV1Client) Connect(ctx context.Context, in *ConnectRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
 	out := new(empty.Empty)
 	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/Connect", in, out, opts...)
@@ -125,15 +104,6 @@ func (c *chatV1Client) List(ctx context.Context, in *ListRequest, opts ...grpc.C
 	return out, nil
 }
 
-func (c *chatV1Client) GetInfo(ctx context.Context, in *GetInfoRequest, opts ...grpc.CallOption) (*GetInfoResponse, error) {
-	out := new(GetInfoResponse)
-	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/GetInfo", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *chatV1Client) ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersResponse, error) {
 	out := new(ListUsersResponse)
 	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/ListUsers", in, out, opts...)
@@ -147,16 +117,13 @@ func (c *chatV1Client) ListUsers(ctx context.Context, in *ListUsersRequest, opts
 // All implementations must embed UnimplementedChatV1Server
 // for forward compatibility
 type ChatV1Server interface {
-	RegistrationUser(context.Context, *RegistrationUserRequest) (*RegistrationUserResponse, error)
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	Delete(context.Context, *DeleteRequest) (*empty.Empty, error)
 	AddUser(context.Context, *AddUserRequest) (*empty.Empty, error)
 	Ban(context.Context, *BanRequest) (*empty.Empty, error)
-	Confirm(context.Context, *ConfirmRequest) (*empty.Empty, error)
 	Connect(context.Context, *ConnectRequest) (*empty.Empty, error)
 	Send(context.Context, *SendRequest) (*empty.Empty, error)
 	List(context.Context, *ListRequest) (*ListResponse, error)
-	GetInfo(context.Context, *GetInfoRequest) (*GetInfoResponse, error)
 	ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error)
 	mustEmbedUnimplementedChatV1Server()
 }
@@ -165,9 +132,6 @@ type ChatV1Server interface {
 type UnimplementedChatV1Server struct {
 }
 
-func (UnimplementedChatV1Server) RegistrationUser(context.Context, *RegistrationUserRequest) (*RegistrationUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RegistrationUser not implemented")
-}
 func (UnimplementedChatV1Server) Create(context.Context, *CreateRequest) (*CreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
@@ -180,9 +144,6 @@ func (UnimplementedChatV1Server) AddUser(context.Context, *AddUserRequest) (*emp
 func (UnimplementedChatV1Server) Ban(context.Context, *BanRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ban not implemented")
 }
-func (UnimplementedChatV1Server) Confirm(context.Context, *ConfirmRequest) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Confirm not implemented")
-}
 func (UnimplementedChatV1Server) Connect(context.Context, *ConnectRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Connect not implemented")
 }
@@ -191,9 +152,6 @@ func (UnimplementedChatV1Server) Send(context.Context, *SendRequest) (*empty.Emp
 }
 func (UnimplementedChatV1Server) List(context.Context, *ListRequest) (*ListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
-}
-func (UnimplementedChatV1Server) GetInfo(context.Context, *GetInfoRequest) (*GetInfoResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetInfo not implemented")
 }
 func (UnimplementedChatV1Server) ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListUsers not implemented")
@@ -209,24 +167,6 @@ type UnsafeChatV1Server interface {
 
 func RegisterChatV1Server(s grpc.ServiceRegistrar, srv ChatV1Server) {
 	s.RegisterService(&ChatV1_ServiceDesc, srv)
-}
-
-func _ChatV1_RegistrationUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RegistrationUserRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ChatV1Server).RegistrationUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/chat_v1.ChatV1/RegistrationUser",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatV1Server).RegistrationUser(ctx, req.(*RegistrationUserRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _ChatV1_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -301,24 +241,6 @@ func _ChatV1_Ban_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ChatV1_Confirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ConfirmRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ChatV1Server).Confirm(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/chat_v1.ChatV1/Confirm",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatV1Server).Confirm(ctx, req.(*ConfirmRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _ChatV1_Connect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ConnectRequest)
 	if err := dec(in); err != nil {
@@ -373,24 +295,6 @@ func _ChatV1_List_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ChatV1_GetInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetInfoRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ChatV1Server).GetInfo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/chat_v1.ChatV1/GetInfo",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatV1Server).GetInfo(ctx, req.(*GetInfoRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _ChatV1_ListUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListUsersRequest)
 	if err := dec(in); err != nil {
@@ -417,10 +321,6 @@ var ChatV1_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ChatV1Server)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "RegistrationUser",
-			Handler:    _ChatV1_RegistrationUser_Handler,
-		},
-		{
 			MethodName: "Create",
 			Handler:    _ChatV1_Create_Handler,
 		},
@@ -437,10 +337,6 @@ var ChatV1_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ChatV1_Ban_Handler,
 		},
 		{
-			MethodName: "Confirm",
-			Handler:    _ChatV1_Confirm_Handler,
-		},
-		{
 			MethodName: "Connect",
 			Handler:    _ChatV1_Connect_Handler,
 		},
@@ -451,10 +347,6 @@ var ChatV1_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _ChatV1_List_Handler,
-		},
-		{
-			MethodName: "GetInfo",
-			Handler:    _ChatV1_GetInfo_Handler,
 		},
 		{
 			MethodName: "ListUsers",

@@ -8,36 +8,42 @@ import "google/protobuf/timestamp.proto";
 option go_package = "github.com/travacry/chat-server/pkg/chat_v1;chat_v1";
 
 service ChatV1 {
-  rpc RegistrationUser(RegistrationUserRequest) returns (RegistrationUserResponse);
   rpc Create(CreateRequest) returns (CreateResponse);
   rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
   rpc AddUser(AddUserRequest) returns (google.protobuf.Empty);
   rpc Ban(BanRequest) returns (google.protobuf.Empty);
-  rpc Confirm(ConfirmRequest) returns (google.protobuf.Empty);
   rpc Connect(ConnectRequest) returns (google.protobuf.Empty);
   rpc Send(SendRequest) returns (google.protobuf.Empty);
   rpc List(ListRequest) returns (ListResponse);
-  rpc GetInfo(GetInfoRequest) returns (GetInfoResponse);
   rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
+}
+
+enum ItemState {
+  chat_active = 0;
+  chat_delete = 1;
+  chat_update = 3;
 }
 
 message UserInfo {
   string name = 1; // for view in chat-room
   string email = 2; // unic
+  ItemState state = 3;
 }
 
 message ChatInfo {
-  int64 id = 1; // id for connected
-  string name = 2; // chat unic name for view
+  string name = 1; // chat unic name for view
+  ItemState state = 2;
   google.protobuf.Timestamp create_at = 3;
 }
 
-message RegistrationUserRequest {
-  UserInfo user = 1;
+message ChatModel {
+  int64 id = 1;
+  ChatInfo chat = 2;
 }
 
-message RegistrationUserResponse {
+message UserModel {
   int64 id = 1;
+  UserInfo user = 2;
 }
 
 message CreateRequest {
@@ -57,11 +63,11 @@ message AddUserRequest {
   UserInfo user = 1;
 }
 
-message BanRequest {
-  UserInfo user = 1;
+message AddUserResponse {
+  int64 id = 1;
 }
 
-message ConfirmRequest {
+message BanRequest {
   int64 id = 1;
 }
 
@@ -70,25 +76,16 @@ message ConnectRequest {
 }
 
 message SendRequest {
-  string from = 2; // email
+  int64 from = 2; // email
   string text = 3;
   google.protobuf.Timestamp timestamp = 4;
 }
 
 message ListRequest {
-  int64 id = 1;
 }
 
 message ListResponse {
-  repeated ChatInfo chats = 1;
-}
-
-message GetInfoRequest {
-  int64 id = 1;
-}
-
-message GetInfoResponse {
-  ChatInfo chat = 1;
+  repeated ChatModel chats = 1;
 }
 
 message ListUsersRequest {
@@ -96,7 +93,7 @@ message ListUsersRequest {
 }
 
 message ListUsersResponse {
-  repeated UserInfo users = 1;
+  repeated UserModel users = 1;
 }
 
 
