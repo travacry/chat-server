@@ -1,0 +1,125 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+group chat-server
+
+
+group USER
+auth_interceptor -> chat: Connect(ConnectRequest{int64: id})
+note left
+1.подключение к чату для отправки сообщений
+пользователям в чате, для отправки всегда
+доступен только один чат
+2.обновить инфу о пользователе с auth
+
+userstate = active
+end note
+auth_interceptor <- chat: ConnectResponse : empty
+auth_interceptor -> chat: Send(SendRequest{int64: from, string: text})
+note left
+отправить сообщение пользователю from = email
+который есть в списке пользователей чата
+и активен
+end note
+auth_interceptor <- chat: SendResponse : empty
+auth_interceptor -> chat: List(ListRequest{})
+note left
+список всех чатов к которым есть доступ
+у текущего пользователя
+end note
+auth_interceptor <- chat: ListResponse : {repeated ChatModel list}
+auth_interceptor -> chat: ListUsers(ListUsersRequest{})
+note left
+1. список пользователей чата = active,
+т.е кому можно адресовать сообщения
+*админ получает всех пользователей с auth
+*если админ подключился то всех пользователей чата
+*юзер получает всех пользователей после connect
+end note
+auth_interceptor <- chat: ListUsersResponse : {repeated UserModel users}
+end
+
+group ADMIN
+auth_interceptor -> chat: Create(CreateRequest{ChatInfo chat, repeated UserInfo users})
+note left
+1. создает чат
+2. запрашивает информацию у auth для валидации инфу
+3. добавляет инфу о чате и юзере
+
+userstate = not_confirm
+[]users userstate = not_confirm
+
+4. метка active
+
+enum UserState {
+    not_confirm = 1;
+    active = 2;
+    ban = 3;
+    delete = 4;
+}
+
+enum ChatState {
+    active = 1;
+    delete = 2;
+}
+
+message ChatInfo {
+  int64 id = 1;
+  string name = 2;
+  enum ChatState = 3;
+  google.protobuf.Timestamp create_at = 4;
+}
+
+message UserInfo {
+  int64 id = 1;
+  string name = 2;
+  string email = 3;
+  enum UserState = 4;
+  google.protobuf.Timestamp create_at = 5;
+}
+end note
+auth_interceptor <- chat: CreateResponse : {int64: id}
+auth_interceptor -> chat: Delete(DeleteRequest{int64: user})
+note left
+1. удаление пользователей, метка
+2. удаление чата, метка
+
+chatstate = delete
+[]users userstate = delete
+end note
+auth_interceptor <- chat: DeleteResponse : empty
+
+auth_interceptor -> chat: AddUser(AddUserRequest{UserInfo: user})
+note left
+1. запрос в auth для валдации инфы всех пользоватлей чата
+2. добавление пользователя к чату,
+*можно сопоставить по email
+*если такого нет добавить
+*если такой есть отклонить
+
+userstate = not_confirm
+end note
+auth_interceptor <- chat: AddUserResponse : {int64: id}
+auth_interceptor -> chat: Ban(BanRequest{int64: user})
+note left
+1. бан пользователя, метка
+для удаления
+
+userstate = ban
+end note
+auth_interceptor <- chat: BanResponse : empty
+end
+
+auth_interceptor -> chat: Create(CreateRequest{ChatInfo chat, repeated UserInfo users})
+auth_interceptor -> chat: List(ListRequest{})
+auth_interceptor -> chat: Connect(ConnectRequest{int64: id})
+auth_interceptor -> chat: ListUsers(ListUsersRequest{int64: id})
+auth_interceptor -> chat: Send(SendRequest{string: from, string: text})
+
+
+end
+
+
+@enduml
