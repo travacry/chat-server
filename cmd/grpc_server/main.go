@@ -19,8 +19,6 @@ import (
 
 const (
 	grpcPort = 50052
-	userID   = 100001
-	chatID   = 101
 )
 
 type server struct {

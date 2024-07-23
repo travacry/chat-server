@@ -85,12 +85,44 @@ func main() {
 	err = ban(ctx, client)
 }
 
+func connectError(userId int64, chatId int64) error {
+	return fmt.Errorf("user : %d filed to connect by chat : %d", userId, chatId)
+}
+
+func sendError(err error) error {
+	return fmt.Errorf("failed send to chat : %v", err)
+}
+
+func listError(err error) error {
+	return fmt.Errorf("failed view list : %v", err)
+}
+
+func listUsersError(err error) error {
+	return fmt.Errorf("failed list users : %v", err)
+}
+
+func createError(err error) error {
+	return fmt.Errorf("failed to create chat by id: %v", err)
+}
+
+func delError(err error) error {
+	return fmt.Errorf("failed to delete chat by id: %v", err)
+}
+
+func addUserError(err error) error {
+	return fmt.Errorf("failed to add user : %v", err)
+}
+
+func banError(err error) error {
+	return fmt.Errorf("failed to ban user : %v", err)
+}
+
 func connect(ctx context.Context, client desc.ChatV1Client) error {
 
 	_, err := client.Connect(ctx, &desc.ConnectRequest{Id: chatID})
 
 	if err != nil {
-		return fmt.Errorf("user : %d filed to connect by chat : %d", userID, chatID)
+		return connectError(userID, chatID)
 	}
 
 	fmt.Print(color.RedString("Connect: "))
@@ -108,7 +140,7 @@ func send(ctx context.Context, client desc.ChatV1Client) error {
 	})
 
 	if err != nil {
-		return fmt.Errorf("failed send to chat : %v", err)
+		return sendError(err)
 	}
 
 	fmt.Print(color.RedString("Send to client: "))
@@ -122,7 +154,7 @@ func list(ctx context.Context, client desc.ChatV1Client) (*desc.ListResponse, er
 	listResponse, err := client.List(ctx, &desc.ListRequest{})
 
 	if err != nil {
-		return nil, fmt.Errorf("failed view list : %v", err)
+		return nil, listError(err)
 	}
 
 	fmt.Print(color.RedString("List: "))
@@ -136,7 +168,7 @@ func listUsers(ctx context.Context, client desc.ChatV1Client) (*desc.ListUsersRe
 	listUsersResponse, err := client.ListUsers(ctx, &desc.ListUsersRequest{Id: userID})
 
 	if err != nil {
-		return nil, fmt.Errorf("failed list users : %v", err)
+		return nil, listUsersError(err)
 	}
 
 	fmt.Print(color.RedString("List users: "))
@@ -158,7 +190,7 @@ func create(ctx context.Context, client desc.ChatV1Client) (*desc.CreateResponse
 	})
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to create chat by id: %v", err)
+		return nil, createError(err)
 	}
 
 	fmt.Print(color.RedString("Create chat: "))
@@ -175,7 +207,7 @@ func del(ctx context.Context, client desc.ChatV1Client) error {
 	})
 
 	if err != nil {
-		return fmt.Errorf("failed to delete chat by id: %v", err)
+		return delError(err)
 	}
 
 	fmt.Print(color.RedString("Delete chat: "))
@@ -192,7 +224,7 @@ func addUser(ctx context.Context, client desc.ChatV1Client) error {
 	})
 
 	if err != nil {
-		return fmt.Errorf("failed to add user : %v", err)
+		return addUserError(err)
 	}
 
 	fmt.Print(color.RedString("Add user: "))
@@ -208,7 +240,7 @@ func ban(ctx context.Context, client desc.ChatV1Client) error {
 	})
 
 	if err != nil {
-		return fmt.Errorf("failed to ban user : %v", err)
+		return banError(err)
 	}
 
 	fmt.Print(color.RedString("Ban user: "))
