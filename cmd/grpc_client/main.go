@@ -86,7 +86,6 @@ func main() {
 }
 
 func connect(ctx context.Context, client desc.ChatV1Client) error {
-
 	_, err := client.Connect(ctx, &desc.ConnectRequest{Id: chatID})
 
 	if err != nil {
@@ -102,11 +101,10 @@ func connectError(userID int64, chatID int64) error {
 }
 
 func send(ctx context.Context, client desc.ChatV1Client) error {
-
-	uId := int64(userID)
+	uID := int64(userID)
 
 	_, err := client.Send(ctx, &desc.SendRequest{
-		From: uId,
+		From: uID,
 		Text: "text text text",
 	})
 
@@ -115,7 +113,7 @@ func send(ctx context.Context, client desc.ChatV1Client) error {
 	}
 
 	fmt.Print(color.RedString("Send to client: "))
-	fmt.Print(color.GreenString("%d\n", uId))
+	fmt.Print(color.GreenString("%d\n", uID))
 
 	return nil
 }
@@ -124,7 +122,6 @@ func sendError(err error) error {
 }
 
 func list(ctx context.Context, client desc.ChatV1Client) (*desc.ListResponse, error) {
-
 	listResponse, err := client.List(ctx, &desc.ListRequest{})
 
 	if err != nil {
@@ -141,7 +138,6 @@ func listError(err error) error {
 }
 
 func listUsers(ctx context.Context, client desc.ChatV1Client) (*desc.ListUsersResponse, error) {
-
 	listUsersResponse, err := client.ListUsers(ctx, &desc.ListUsersRequest{Id: userID})
 
 	if err != nil {
@@ -157,7 +153,6 @@ func listUsersError(err error) error {
 }
 
 func create(ctx context.Context, client desc.ChatV1Client) (*desc.CreateResponse, error) {
-
 	users := []*desc.UserInfo{
 		{Name: gofakeit.Name(), Email: gofakeit.Email()},
 		{Name: gofakeit.Name(), Email: gofakeit.Email()},
@@ -202,7 +197,6 @@ func delError(err error) error {
 }
 
 func addUser(ctx context.Context, client desc.ChatV1Client) error {
-
 	user := &desc.UserInfo{Name: gofakeit.Name(), Email: gofakeit.Email()}
 
 	_, err := client.AddUser(ctx, &desc.AddUserRequest{
