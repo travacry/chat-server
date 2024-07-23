@@ -101,10 +101,8 @@ func connectError(userID int64, chatID int64) error {
 }
 
 func send(ctx context.Context, client desc.ChatV1Client) error {
-	uID := int64(userID)
-
 	_, err := client.Send(ctx, &desc.SendRequest{
-		From: uID,
+		From: userID,
 		Text: "text text text",
 	})
 
@@ -113,7 +111,7 @@ func send(ctx context.Context, client desc.ChatV1Client) error {
 	}
 
 	fmt.Print(color.RedString("Send to client: "))
-	fmt.Print(color.GreenString("%d\n", uID))
+	fmt.Print(color.GreenString("%d\n", userID))
 
 	return nil
 }
