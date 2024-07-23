@@ -177,7 +177,6 @@ func createError(err error) error {
 }
 
 func del(ctx context.Context, client desc.ChatV1Client) error {
-
 	cId := int64(chatID)
 
 	_, err := client.Delete(ctx, &desc.DeleteRequest{
