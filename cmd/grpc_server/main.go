@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 	"log"
 	"net"
 	"strconv"
@@ -10,8 +12,6 @@ import (
 	"github.com/brianvoe/gofakeit"
 	"github.com/fatih/color"
 	"github.com/golang/protobuf/ptypes/empty"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	desc "github.com/travacry/chat-server/pkg/chat_v1"
@@ -23,6 +23,23 @@ const (
 
 type server struct {
 	desc.UnimplementedChatV1Server
+}
+
+func main() {
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcPort))
+	if err != nil {
+		log.Panicf("failed to listen: %v", err)
+	}
+
+	s := grpc.NewServer()
+	reflection.Register(s)
+	desc.RegisterChatV1Server(s, &server{})
+
+	log.Printf("server chat listening at %v", lis.Addr())
+
+	if err = s.Serve(lis); err != nil {
+		log.Printf("failed to chat serve: %v", err)
+	}
 }
 
 func (s *server) Connect(_ context.Context, req *desc.ConnectRequest) (*empty.Empty, error) {
@@ -96,21 +113,4 @@ func (s *server) Ban(_ context.Context, req *desc.BanRequest) (*empty.Empty, err
 	fmt.Print(color.GreenString("%+d\n", req.GetId()))
 
 	return &empty.Empty{}, nil
-}
-
-func main() {
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcPort))
-	if err != nil {
-		log.Panicf("failed to listen: %v", err)
-	}
-
-	s := grpc.NewServer()
-	reflection.Register(s)
-	desc.RegisterChatV1Server(s, &server{})
-
-	log.Printf("server chat listening at %v", lis.Addr())
-
-	if err = s.Serve(lis); err != nil {
-		log.Printf("failed to chat serve: %v", err)
-	}
 }
