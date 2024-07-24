@@ -100,7 +100,6 @@ func (s *server) Ban(_ context.Context, req *desc.BanRequest) (*empty.Empty, err
 
 func main() {
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcPort))
-
 	if err != nil {
 		log.Panicf("failed to listen: %v", err)
 	}

@@ -41,53 +41,48 @@ func main() {
 	defer cancel()
 
 	err = connect(ctx, client)
-
 	if err != nil {
 		log.Print(err)
 	}
 
 	err = send(ctx, client)
-
 	if err != nil {
 		log.Print(err)
 	}
 
 	_, err = create(ctx, client)
-
 	if err != nil {
 		log.Print(err)
 	}
 
 	_, err = list(ctx, client)
-
 	if err != nil {
 		log.Print(err)
 	}
 
 	_, err = listUsers(ctx, client)
-
 	if err != nil {
 		log.Print(err)
 	}
 
 	err = del(ctx, client)
-
 	if err != nil {
 		log.Print(err)
 	}
 
 	err = addUser(ctx, client)
-
 	if err != nil {
 		log.Print(err)
 	}
 
 	err = ban(ctx, client)
+	if err != nil {
+		log.Print(err)
+	}
 }
 
 func connect(ctx context.Context, client desc.ChatV1Client) error {
 	_, err := client.Connect(ctx, &desc.ConnectRequest{Id: chatID})
-
 	if err != nil {
 		return connectError(userID, chatID)
 	}
@@ -105,7 +100,6 @@ func send(ctx context.Context, client desc.ChatV1Client) error {
 		From: userID,
 		Text: "text text text",
 	})
-
 	if err != nil {
 		return sendError(err)
 	}
@@ -121,7 +115,6 @@ func sendError(err error) error {
 
 func list(ctx context.Context, client desc.ChatV1Client) (*desc.ListResponse, error) {
 	listResponse, err := client.List(ctx, &desc.ListRequest{})
-
 	if err != nil {
 		return nil, listError(err)
 	}
@@ -137,7 +130,6 @@ func listError(err error) error {
 
 func listUsers(ctx context.Context, client desc.ChatV1Client) (*desc.ListUsersResponse, error) {
 	listUsersResponse, err := client.ListUsers(ctx, &desc.ListUsersRequest{Id: userID})
-
 	if err != nil {
 		return nil, listUsersError(err)
 	}
@@ -161,7 +153,6 @@ func create(ctx context.Context, client desc.ChatV1Client) (*desc.CreateResponse
 	createResponse, err := client.Create(ctx, &desc.CreateRequest{
 		Users: users,
 	})
-
 	if err != nil {
 		return nil, createError(err)
 	}
@@ -178,7 +169,6 @@ func del(ctx context.Context, client desc.ChatV1Client) error {
 	_, err := client.Delete(ctx, &desc.DeleteRequest{
 		Id: chatID,
 	})
-
 	if err != nil {
 		return delError(err)
 	}
@@ -197,7 +187,6 @@ func addUser(ctx context.Context, client desc.ChatV1Client) error {
 	_, err := client.AddUser(ctx, &desc.AddUserRequest{
 		User: user,
 	})
-
 	if err != nil {
 		return addUserError(err)
 	}
@@ -216,7 +205,6 @@ func ban(ctx context.Context, client desc.ChatV1Client) error {
 	_, err := client.Ban(ctx, &desc.BanRequest{
 		Id: userID,
 	})
-
 	if err != nil {
 		return banError(err)
 	}
