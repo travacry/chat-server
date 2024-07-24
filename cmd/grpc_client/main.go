@@ -22,12 +22,10 @@ const (
 )
 
 func main() {
-
 	conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("failed to connect to server: %v", err)
 	}
-
 	defer func() {
 		err = conn.Close()
 		if err != nil {
