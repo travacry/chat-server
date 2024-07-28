@@ -8,13 +8,13 @@ import "google/protobuf/timestamp.proto";
 option go_package = "github.com/travacry/chat-server/pkg/chat_v1;chat_v1";
 
 service ChatV1 {
-  rpc Create(CreateRequest) returns (CreateResponse);
-  rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
+  rpc CreateChat(CreateChatRequest) returns (CreateChatResponse);
+  rpc DeleteChat(DeleteChatRequest) returns (google.protobuf.Empty);
   rpc AddUser(AddUserRequest) returns (google.protobuf.Empty);
-  rpc Ban(BanRequest) returns (google.protobuf.Empty);
+  rpc BanUser(BanUserRequest) returns (google.protobuf.Empty);
   rpc Connect(ConnectRequest) returns (google.protobuf.Empty);
   rpc Send(SendRequest) returns (google.protobuf.Empty);
-  rpc List(ListRequest) returns (ListResponse);
+  rpc ListChats(ListChatsRequest) returns (ListChatsResponse);
   rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
 }
 
@@ -46,16 +46,16 @@ message UserModel {
   UserInfo user = 2;
 }
 
-message CreateRequest {
+message CreateChatRequest {
   ChatInfo chat = 1;
   repeated UserInfo users = 2;
 }
 
-message CreateResponse {
+message CreateChatResponse {
   int64 id = 1; // number in pool chat-rooms
 }
 
-message DeleteRequest {
+message DeleteChatRequest {
   int64 id = 1;
 }
 
@@ -67,7 +67,7 @@ message AddUserResponse {
   int64 id = 1;
 }
 
-message BanRequest {
+message BanUserRequest {
   int64 id = 1;
 }
 
@@ -81,10 +81,10 @@ message SendRequest {
   google.protobuf.Timestamp timestamp = 4;
 }
 
-message ListRequest {
+message ListChatsRequest {
 }
 
-message ListResponse {
+message ListChatsResponse {
   repeated ChatModel chats = 1;
 }
 

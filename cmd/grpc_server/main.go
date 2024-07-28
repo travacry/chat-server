@@ -43,7 +43,7 @@ func main() {
 }
 
 func (s *server) Connect(_ context.Context, req *desc.ConnectRequest) (*empty.Empty, error) {
-	fmt.Print(color.RedString("Ban User: "))
+	fmt.Print(color.RedString("Ban user: "))
 	fmt.Print(color.GreenString("info: %d\n", req.GetId()))
 
 	return &empty.Empty{}, nil
@@ -56,10 +56,10 @@ func (s *server) Send(_ context.Context, req *desc.SendRequest) (*empty.Empty, e
 	return &empty.Empty{}, nil
 }
 
-func (s *server) List(_ context.Context, _ *desc.ListRequest) (*desc.ListResponse, error) {
-	fmt.Print(color.RedString("ListResponse.\n"))
+func (s *server) ListChats(_ context.Context, _ *desc.ListChatsRequest) (*desc.ListChatsResponse, error) {
+	fmt.Print(color.RedString("ListChats.\n"))
 
-	return &desc.ListResponse{
+	return &desc.ListChatsResponse{
 		Chats: []*desc.ChatModel{
 			{Id: gofakeit.Int64(), Chat: &desc.ChatInfo{Name: gofakeit.Name(), CreateAt: timestamppb.New(gofakeit.Date())}},
 			{Id: gofakeit.Int64(), Chat: &desc.ChatInfo{Name: gofakeit.Name(), CreateAt: timestamppb.New(gofakeit.Date())}},
@@ -85,16 +85,16 @@ func (s *server) ListUsers(_ context.Context, req *desc.ListUsersRequest) (*desc
 	}}, nil
 }
 
-func (s *server) Create(_ context.Context, req *desc.CreateRequest) (*desc.CreateResponse, error) {
-	fmt.Print(color.RedString("CreateResponse: "))
+func (s *server) CreateChat(_ context.Context, req *desc.CreateChatRequest) (*desc.CreateChatResponse, error) {
+	fmt.Print(color.RedString("Create Chat: "))
 	fmt.Print(color.GreenString("%+v\n", req.GetUsers()))
 
-	return &desc.CreateResponse{
+	return &desc.CreateChatResponse{
 		Id: gofakeit.Int64(),
 	}, nil
 }
 
-func (s *server) Delete(_ context.Context, req *desc.DeleteRequest) (*empty.Empty, error) {
+func (s *server) DeleteChat(_ context.Context, req *desc.DeleteChatRequest) (*empty.Empty, error) {
 	fmt.Print(color.RedString("Delete Chat: "))
 	fmt.Print(color.GreenString("%d\n", req.GetId()))
 
@@ -108,8 +108,8 @@ func (s *server) AddUser(_ context.Context, req *desc.AddUserRequest) (*empty.Em
 	return &empty.Empty{}, nil
 }
 
-func (s *server) Ban(_ context.Context, req *desc.BanRequest) (*empty.Empty, error) {
-	fmt.Print(color.RedString("Ban User: "))
+func (s *server) BanUser(_ context.Context, req *desc.BanUserRequest) (*empty.Empty, error) {
+	fmt.Print(color.RedString("Ban user: "))
 	fmt.Print(color.GreenString("%+d\n", req.GetId()))
 
 	return &empty.Empty{}, nil

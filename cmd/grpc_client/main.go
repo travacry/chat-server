@@ -48,7 +48,7 @@ func main() {
 		log.Print(err)
 	}
 
-	_, err = create(ctx, client)
+	_, err = createChat(ctx, client)
 	if err != nil {
 		log.Print(err)
 	}
@@ -111,16 +111,16 @@ func sendError(err error) error {
 	return fmt.Errorf("failed send to chat : %v", err)
 }
 
-func list(ctx context.Context, client desc.ChatV1Client) (*desc.ListResponse, error) {
-	listResponse, err := client.List(ctx, &desc.ListRequest{})
+func list(ctx context.Context, client desc.ChatV1Client) (*desc.ListChatsResponse, error) {
+	ListChatsResponse, err := client.ListChats(ctx, &desc.ListChatsRequest{})
 	if err != nil {
 		return nil, listError(err)
 	}
 
-	fmt.Print(color.RedString("List: "))
-	fmt.Print(color.GreenString("%v\n", listResponse.GetChats()))
+	fmt.Print(color.RedString("List chats: "))
+	fmt.Print(color.GreenString("%v\n", ListChatsResponse.GetChats()))
 
-	return listResponse, nil
+	return ListChatsResponse, nil
 }
 func listError(err error) error {
 	return fmt.Errorf("failed view list : %v", err)
@@ -140,7 +140,7 @@ func listUsersError(err error) error {
 	return fmt.Errorf("failed list users : %v", err)
 }
 
-func create(ctx context.Context, client desc.ChatV1Client) (*desc.CreateResponse, error) {
+func createChat(ctx context.Context, client desc.ChatV1Client) (*desc.CreateChatResponse, error) {
 	users := []*desc.UserInfo{
 		{Name: gofakeit.Name(), Email: gofakeit.Email()},
 		{Name: gofakeit.Name(), Email: gofakeit.Email()},
@@ -148,7 +148,7 @@ func create(ctx context.Context, client desc.ChatV1Client) (*desc.CreateResponse
 		{Name: gofakeit.Name(), Email: gofakeit.Email()},
 	}
 
-	createResponse, err := client.Create(ctx, &desc.CreateRequest{
+	CreateChatResponse, err := client.CreateChat(ctx, &desc.CreateChatRequest{
 		Users: users,
 	})
 	if err != nil {
@@ -156,15 +156,15 @@ func create(ctx context.Context, client desc.ChatV1Client) (*desc.CreateResponse
 	}
 
 	fmt.Print(color.RedString("Create chat: "))
-	fmt.Print(color.GreenString("%s\n", strconv.FormatInt(createResponse.GetId(), 10)))
-	return createResponse, nil
+	fmt.Print(color.GreenString("%s\n", strconv.FormatInt(CreateChatResponse.GetId(), 10)))
+	return CreateChatResponse, nil
 }
 func createError(err error) error {
 	return fmt.Errorf("failed to create chat : %v", err)
 }
 
 func del(ctx context.Context, client desc.ChatV1Client) error {
-	_, err := client.Delete(ctx, &desc.DeleteRequest{
+	_, err := client.DeleteChat(ctx, &desc.DeleteChatRequest{
 		Id: chatID,
 	})
 	if err != nil {
@@ -200,7 +200,7 @@ func addUserError(err error) error {
 func ban(ctx context.Context, client desc.ChatV1Client) error {
 	user := &desc.UserInfo{Name: gofakeit.Name(), Email: gofakeit.Email()}
 
-	_, err := client.Ban(ctx, &desc.BanRequest{
+	_, err := client.BanUser(ctx, &desc.BanUserRequest{
 		Id: userID,
 	})
 	if err != nil {

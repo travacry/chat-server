@@ -24,12 +24,12 @@ note left
 и активен
 end note
 auth_interceptor <- chat: SendResponse : empty
-auth_interceptor -> chat: List(ListRequest{})
+auth_interceptor -> chat: ListChats(ListChatsRequest{})
 note left
 список всех чатов к которым есть доступ
 у текущего пользователя
 end note
-auth_interceptor <- chat: ListResponse : {repeated ChatModel list}
+auth_interceptor <- chat: ListChatsResponse : {repeated ChatModel list}
 auth_interceptor -> chat: ListUsers(ListUsersRequest{})
 note left
 1. список пользователей чата = active,
@@ -42,7 +42,7 @@ auth_interceptor <- chat: ListUsersResponse : {repeated UserModel users}
 end
 
 group ADMIN
-auth_interceptor -> chat: Create(CreateRequest{ChatInfo chat, repeated UserInfo users})
+auth_interceptor -> chat: CreateChat(CreateChatRequest{ChatInfo chat, repeated UserInfo users})
 note left
 1. создает чат
 2. запрашивает информацию у auth для валидации инфу
@@ -80,8 +80,8 @@ message UserInfo {
   google.protobuf.Timestamp create_at = 5;
 }
 end note
-auth_interceptor <- chat: CreateResponse : {int64: id}
-auth_interceptor -> chat: Delete(DeleteRequest{int64: user})
+auth_interceptor <- chat: CreateChatResponse : {int64: id}
+auth_interceptor -> chat: DeleteChat(DeleteChatRequest{int64: user})
 note left
 1. удаление пользователей, метка
 2. удаление чата, метка
@@ -89,7 +89,7 @@ note left
 chatstate = delete
 []users userstate = delete
 end note
-auth_interceptor <- chat: DeleteResponse : empty
+auth_interceptor <- chat: DeleteChatResponse : empty
 
 auth_interceptor -> chat: AddUser(AddUserRequest{UserInfo: user})
 note left
@@ -102,7 +102,7 @@ note left
 userstate = not_confirm
 end note
 auth_interceptor <- chat: AddUserResponse : {int64: id}
-auth_interceptor -> chat: Ban(BanRequest{int64: user})
+auth_interceptor -> chat: BanUser(BanUserRequest{int64: user})
 note left
 1. бан пользователя, метка
 для удаления
@@ -112,8 +112,8 @@ end note
 auth_interceptor <- chat: BanResponse : empty
 end
 
-auth_interceptor -> chat: Create(CreateRequest{ChatInfo chat, repeated UserInfo users})
-auth_interceptor -> chat: List(ListRequest{})
+auth_interceptor -> chat: CreateChat(CreateChatRequest{ChatInfo chat, repeated UserInfo users})
+auth_interceptor -> chat: ListChats(ListChatsRequest{})
 auth_interceptor -> chat: Connect(ConnectRequest{int64: id})
 auth_interceptor -> chat: ListUsers(ListUsersRequest{int64: id})
 auth_interceptor -> chat: Send(SendRequest{string: from, string: text})

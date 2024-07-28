@@ -23,13 +23,13 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ChatV1Client interface {
-	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
-	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	CreateChat(ctx context.Context, in *CreateChatRequest, opts ...grpc.CallOption) (*CreateChatResponse, error)
+	DeleteChat(ctx context.Context, in *DeleteChatRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	AddUser(ctx context.Context, in *AddUserRequest, opts ...grpc.CallOption) (*empty.Empty, error)
-	Ban(ctx context.Context, in *BanRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	BanUser(ctx context.Context, in *BanUserRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	Connect(ctx context.Context, in *ConnectRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	Send(ctx context.Context, in *SendRequest, opts ...grpc.CallOption) (*empty.Empty, error)
-	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
+	ListChats(ctx context.Context, in *ListChatsRequest, opts ...grpc.CallOption) (*ListChatsResponse, error)
 	ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersResponse, error)
 }
 
@@ -41,18 +41,18 @@ func NewChatV1Client(cc grpc.ClientConnInterface) ChatV1Client {
 	return &chatV1Client{cc}
 }
 
-func (c *chatV1Client) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
-	out := new(CreateResponse)
-	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/Create", in, out, opts...)
+func (c *chatV1Client) CreateChat(ctx context.Context, in *CreateChatRequest, opts ...grpc.CallOption) (*CreateChatResponse, error) {
+	out := new(CreateChatResponse)
+	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/CreateChat", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *chatV1Client) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+func (c *chatV1Client) DeleteChat(ctx context.Context, in *DeleteChatRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
 	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/Delete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/DeleteChat", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -68,9 +68,9 @@ func (c *chatV1Client) AddUser(ctx context.Context, in *AddUserRequest, opts ...
 	return out, nil
 }
 
-func (c *chatV1Client) Ban(ctx context.Context, in *BanRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+func (c *chatV1Client) BanUser(ctx context.Context, in *BanUserRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
 	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/Ban", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/BanUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -95,9 +95,9 @@ func (c *chatV1Client) Send(ctx context.Context, in *SendRequest, opts ...grpc.C
 	return out, nil
 }
 
-func (c *chatV1Client) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
-	out := new(ListResponse)
-	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/List", in, out, opts...)
+func (c *chatV1Client) ListChats(ctx context.Context, in *ListChatsRequest, opts ...grpc.CallOption) (*ListChatsResponse, error) {
+	out := new(ListChatsResponse)
+	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/ListChats", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -117,13 +117,13 @@ func (c *chatV1Client) ListUsers(ctx context.Context, in *ListUsersRequest, opts
 // All implementations must embed UnimplementedChatV1Server
 // for forward compatibility
 type ChatV1Server interface {
-	Create(context.Context, *CreateRequest) (*CreateResponse, error)
-	Delete(context.Context, *DeleteRequest) (*empty.Empty, error)
+	CreateChat(context.Context, *CreateChatRequest) (*CreateChatResponse, error)
+	DeleteChat(context.Context, *DeleteChatRequest) (*empty.Empty, error)
 	AddUser(context.Context, *AddUserRequest) (*empty.Empty, error)
-	Ban(context.Context, *BanRequest) (*empty.Empty, error)
+	BanUser(context.Context, *BanUserRequest) (*empty.Empty, error)
 	Connect(context.Context, *ConnectRequest) (*empty.Empty, error)
 	Send(context.Context, *SendRequest) (*empty.Empty, error)
-	List(context.Context, *ListRequest) (*ListResponse, error)
+	ListChats(context.Context, *ListChatsRequest) (*ListChatsResponse, error)
 	ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error)
 	mustEmbedUnimplementedChatV1Server()
 }
@@ -132,17 +132,17 @@ type ChatV1Server interface {
 type UnimplementedChatV1Server struct {
 }
 
-func (UnimplementedChatV1Server) Create(context.Context, *CreateRequest) (*CreateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+func (UnimplementedChatV1Server) CreateChat(context.Context, *CreateChatRequest) (*CreateChatResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateChat not implemented")
 }
-func (UnimplementedChatV1Server) Delete(context.Context, *DeleteRequest) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+func (UnimplementedChatV1Server) DeleteChat(context.Context, *DeleteChatRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteChat not implemented")
 }
 func (UnimplementedChatV1Server) AddUser(context.Context, *AddUserRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddUser not implemented")
 }
-func (UnimplementedChatV1Server) Ban(context.Context, *BanRequest) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Ban not implemented")
+func (UnimplementedChatV1Server) BanUser(context.Context, *BanUserRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BanUser not implemented")
 }
 func (UnimplementedChatV1Server) Connect(context.Context, *ConnectRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Connect not implemented")
@@ -150,8 +150,8 @@ func (UnimplementedChatV1Server) Connect(context.Context, *ConnectRequest) (*emp
 func (UnimplementedChatV1Server) Send(context.Context, *SendRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Send not implemented")
 }
-func (UnimplementedChatV1Server) List(context.Context, *ListRequest) (*ListResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+func (UnimplementedChatV1Server) ListChats(context.Context, *ListChatsRequest) (*ListChatsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListChats not implemented")
 }
 func (UnimplementedChatV1Server) ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListUsers not implemented")
@@ -169,38 +169,38 @@ func RegisterChatV1Server(s grpc.ServiceRegistrar, srv ChatV1Server) {
 	s.RegisterService(&ChatV1_ServiceDesc, srv)
 }
 
-func _ChatV1_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateRequest)
+func _ChatV1_CreateChat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateChatRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ChatV1Server).Create(ctx, in)
+		return srv.(ChatV1Server).CreateChat(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/chat_v1.ChatV1/Create",
+		FullMethod: "/chat_v1.ChatV1/CreateChat",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatV1Server).Create(ctx, req.(*CreateRequest))
+		return srv.(ChatV1Server).CreateChat(ctx, req.(*CreateChatRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ChatV1_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteRequest)
+func _ChatV1_DeleteChat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteChatRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ChatV1Server).Delete(ctx, in)
+		return srv.(ChatV1Server).DeleteChat(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/chat_v1.ChatV1/Delete",
+		FullMethod: "/chat_v1.ChatV1/DeleteChat",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatV1Server).Delete(ctx, req.(*DeleteRequest))
+		return srv.(ChatV1Server).DeleteChat(ctx, req.(*DeleteChatRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -223,20 +223,20 @@ func _ChatV1_AddUser_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ChatV1_Ban_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BanRequest)
+func _ChatV1_BanUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BanUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ChatV1Server).Ban(ctx, in)
+		return srv.(ChatV1Server).BanUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/chat_v1.ChatV1/Ban",
+		FullMethod: "/chat_v1.ChatV1/BanUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatV1Server).Ban(ctx, req.(*BanRequest))
+		return srv.(ChatV1Server).BanUser(ctx, req.(*BanUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -277,20 +277,20 @@ func _ChatV1_Send_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ChatV1_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListRequest)
+func _ChatV1_ListChats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListChatsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ChatV1Server).List(ctx, in)
+		return srv.(ChatV1Server).ListChats(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/chat_v1.ChatV1/List",
+		FullMethod: "/chat_v1.ChatV1/ListChats",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatV1Server).List(ctx, req.(*ListRequest))
+		return srv.(ChatV1Server).ListChats(ctx, req.(*ListChatsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -321,20 +321,20 @@ var ChatV1_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ChatV1Server)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Create",
-			Handler:    _ChatV1_Create_Handler,
+			MethodName: "CreateChat",
+			Handler:    _ChatV1_CreateChat_Handler,
 		},
 		{
-			MethodName: "Delete",
-			Handler:    _ChatV1_Delete_Handler,
+			MethodName: "DeleteChat",
+			Handler:    _ChatV1_DeleteChat_Handler,
 		},
 		{
 			MethodName: "AddUser",
 			Handler:    _ChatV1_AddUser_Handler,
 		},
 		{
-			MethodName: "Ban",
-			Handler:    _ChatV1_Ban_Handler,
+			MethodName: "BanUser",
+			Handler:    _ChatV1_BanUser_Handler,
 		},
 		{
 			MethodName: "Connect",
@@ -345,8 +345,8 @@ var ChatV1_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ChatV1_Send_Handler,
 		},
 		{
-			MethodName: "List",
-			Handler:    _ChatV1_List_Handler,
+			MethodName: "ListChats",
+			Handler:    _ChatV1_ListChats_Handler,
 		},
 		{
 			MethodName: "ListUsers",
