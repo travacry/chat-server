@@ -25,11 +25,11 @@ const _ = grpc.SupportPackageIsVersion7
 type ChatV1Client interface {
 	CreateChat(ctx context.Context, in *CreateChatRequest, opts ...grpc.CallOption) (*CreateChatResponse, error)
 	DeleteChat(ctx context.Context, in *DeleteChatRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	ListChats(ctx context.Context, in *ListChatsRequest, opts ...grpc.CallOption) (*ListChatsResponse, error)
+	Connect(ctx context.Context, in *ConnectRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	SendMessage(ctx context.Context, in *SendMessageRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	AddUser(ctx context.Context, in *AddUserRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	BanUser(ctx context.Context, in *BanUserRequest, opts ...grpc.CallOption) (*empty.Empty, error)
-	Connect(ctx context.Context, in *ConnectRequest, opts ...grpc.CallOption) (*empty.Empty, error)
-	Send(ctx context.Context, in *SendRequest, opts ...grpc.CallOption) (*empty.Empty, error)
-	ListChats(ctx context.Context, in *ListChatsRequest, opts ...grpc.CallOption) (*ListChatsResponse, error)
 	ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersResponse, error)
 }
 
@@ -59,18 +59,9 @@ func (c *chatV1Client) DeleteChat(ctx context.Context, in *DeleteChatRequest, op
 	return out, nil
 }
 
-func (c *chatV1Client) AddUser(ctx context.Context, in *AddUserRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/AddUser", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *chatV1Client) BanUser(ctx context.Context, in *BanUserRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/BanUser", in, out, opts...)
+func (c *chatV1Client) ListChats(ctx context.Context, in *ListChatsRequest, opts ...grpc.CallOption) (*ListChatsResponse, error) {
+	out := new(ListChatsResponse)
+	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/ListChats", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -86,18 +77,27 @@ func (c *chatV1Client) Connect(ctx context.Context, in *ConnectRequest, opts ...
 	return out, nil
 }
 
-func (c *chatV1Client) Send(ctx context.Context, in *SendRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+func (c *chatV1Client) SendMessage(ctx context.Context, in *SendMessageRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
 	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/Send", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/SendMessage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *chatV1Client) ListChats(ctx context.Context, in *ListChatsRequest, opts ...grpc.CallOption) (*ListChatsResponse, error) {
-	out := new(ListChatsResponse)
-	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/ListChats", in, out, opts...)
+func (c *chatV1Client) AddUser(ctx context.Context, in *AddUserRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/AddUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *chatV1Client) BanUser(ctx context.Context, in *BanUserRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/chat_v1.ChatV1/BanUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -119,11 +119,11 @@ func (c *chatV1Client) ListUsers(ctx context.Context, in *ListUsersRequest, opts
 type ChatV1Server interface {
 	CreateChat(context.Context, *CreateChatRequest) (*CreateChatResponse, error)
 	DeleteChat(context.Context, *DeleteChatRequest) (*empty.Empty, error)
+	ListChats(context.Context, *ListChatsRequest) (*ListChatsResponse, error)
+	Connect(context.Context, *ConnectRequest) (*empty.Empty, error)
+	SendMessage(context.Context, *SendMessageRequest) (*empty.Empty, error)
 	AddUser(context.Context, *AddUserRequest) (*empty.Empty, error)
 	BanUser(context.Context, *BanUserRequest) (*empty.Empty, error)
-	Connect(context.Context, *ConnectRequest) (*empty.Empty, error)
-	Send(context.Context, *SendRequest) (*empty.Empty, error)
-	ListChats(context.Context, *ListChatsRequest) (*ListChatsResponse, error)
 	ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error)
 	mustEmbedUnimplementedChatV1Server()
 }
@@ -138,20 +138,20 @@ func (UnimplementedChatV1Server) CreateChat(context.Context, *CreateChatRequest)
 func (UnimplementedChatV1Server) DeleteChat(context.Context, *DeleteChatRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteChat not implemented")
 }
+func (UnimplementedChatV1Server) ListChats(context.Context, *ListChatsRequest) (*ListChatsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListChats not implemented")
+}
+func (UnimplementedChatV1Server) Connect(context.Context, *ConnectRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Connect not implemented")
+}
+func (UnimplementedChatV1Server) SendMessage(context.Context, *SendMessageRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendMessage not implemented")
+}
 func (UnimplementedChatV1Server) AddUser(context.Context, *AddUserRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddUser not implemented")
 }
 func (UnimplementedChatV1Server) BanUser(context.Context, *BanUserRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BanUser not implemented")
-}
-func (UnimplementedChatV1Server) Connect(context.Context, *ConnectRequest) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Connect not implemented")
-}
-func (UnimplementedChatV1Server) Send(context.Context, *SendRequest) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Send not implemented")
-}
-func (UnimplementedChatV1Server) ListChats(context.Context, *ListChatsRequest) (*ListChatsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListChats not implemented")
 }
 func (UnimplementedChatV1Server) ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListUsers not implemented")
@@ -205,6 +205,60 @@ func _ChatV1_DeleteChat_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ChatV1_ListChats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListChatsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatV1Server).ListChats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/chat_v1.ChatV1/ListChats",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatV1Server).ListChats(ctx, req.(*ListChatsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ChatV1_Connect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConnectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatV1Server).Connect(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/chat_v1.ChatV1/Connect",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatV1Server).Connect(ctx, req.(*ConnectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ChatV1_SendMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendMessageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatV1Server).SendMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/chat_v1.ChatV1/SendMessage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatV1Server).SendMessage(ctx, req.(*SendMessageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ChatV1_AddUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddUserRequest)
 	if err := dec(in); err != nil {
@@ -237,60 +291,6 @@ func _ChatV1_BanUser_Handler(srv interface{}, ctx context.Context, dec func(inte
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ChatV1Server).BanUser(ctx, req.(*BanUserRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ChatV1_Connect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ConnectRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ChatV1Server).Connect(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/chat_v1.ChatV1/Connect",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatV1Server).Connect(ctx, req.(*ConnectRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ChatV1_Send_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SendRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ChatV1Server).Send(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/chat_v1.ChatV1/Send",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatV1Server).Send(ctx, req.(*SendRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ChatV1_ListChats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListChatsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ChatV1Server).ListChats(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/chat_v1.ChatV1/ListChats",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatV1Server).ListChats(ctx, req.(*ListChatsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -329,24 +329,24 @@ var ChatV1_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ChatV1_DeleteChat_Handler,
 		},
 		{
-			MethodName: "AddUser",
-			Handler:    _ChatV1_AddUser_Handler,
-		},
-		{
-			MethodName: "BanUser",
-			Handler:    _ChatV1_BanUser_Handler,
+			MethodName: "ListChats",
+			Handler:    _ChatV1_ListChats_Handler,
 		},
 		{
 			MethodName: "Connect",
 			Handler:    _ChatV1_Connect_Handler,
 		},
 		{
-			MethodName: "Send",
-			Handler:    _ChatV1_Send_Handler,
+			MethodName: "SendMessage",
+			Handler:    _ChatV1_SendMessage_Handler,
 		},
 		{
-			MethodName: "ListChats",
-			Handler:    _ChatV1_ListChats_Handler,
+			MethodName: "AddUser",
+			Handler:    _ChatV1_AddUser_Handler,
+		},
+		{
+			MethodName: "BanUser",
+			Handler:    _ChatV1_BanUser_Handler,
 		},
 		{
 			MethodName: "ListUsers",
